@@ -164,7 +164,7 @@
      <string>Volume:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelTime">
+   <widget class="QLabel" name="labelPosition">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -242,7 +242,7 @@
      <x>0</x>
      <y>0</y>
      <width>590</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
