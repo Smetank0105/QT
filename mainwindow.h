@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QMediaPlayer>
 #include <QTime>
+#include <QMediaPlaylist>
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,6 +18,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void LoadFileToPList(const QString& filename);
 
 private slots:
 	void on_pushButtonAdd_clicked();
@@ -39,5 +43,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 	QMediaPlayer* m_player;
+    QMediaPlaylist* m_plist;
+    QStandardItemModel* m_plist_model;
 };
 #endif // MAINWINDOW_H
