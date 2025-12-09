@@ -76,17 +76,6 @@ void MainWindow::LoadFileToPList(const QString &filename)
 
 void MainWindow::on_pushButtonAdd_clicked()
 {
-    /*QString file = QFileDialog::getOpenFileName
-	(
-		this,
-		"Open file",
-        "D:\\musik\\",
-		"Audio files (*.mp3 *.flac);; MP-3 (*.mp3);; Flac (*.flac)"
-	);
-	ui->labelFilename->setText(QString("File: ").append(file));
-	this->m_player->setMedia(QUrl(file));
-    this->m_player->play();*/
-
     QStringList files = QFileDialog::getOpenFileNames
             (
                 this,
@@ -143,5 +132,76 @@ void MainWindow::on_positionChanged(qint64 position)
 void MainWindow::on_horizontalSliderTime_sliderMoved(qint64 position)
 {
     this->m_player->setPosition(position);
+}
+
+
+void MainWindow::on_pushButtonShuffle_clicked()
+{
+    this->m_plist_model->clear();
+
+    m_plist_model->setHorizontalHeaderLabels(QStringList() << "Audio Track" << "File Path" << "Duration");
+    this->ui->tableViewPList->hideColumn(1);
+    int duration_width = 64;
+    this->ui->tableViewPList->setColumnWidth(2,duration_width);
+    this->ui->tableViewPList->setColumnWidth(0,this->ui->tableViewPList->width() - duration_width*1.7);
+
+    this->m_plist->shuffle();
+
+    for(int i =0; i < m_plist->mediaCount(); i++)
+    {
+        QUrl url = m_plist->media(i).canonicalUrl();
+        QList<QStandardItem*> items;
+        items.append(new QStandardItem(url.fileName()));
+        items.append(new QStandardItem(url.path()));
+        m_plist_model->appendRow(items);
+    }
+
+    this->ui->tableViewPList->selectRow(m_plist->currentIndex());
+}
+
+
+void MainWindow::on_checkBoxRepeate_stateChanged(int arg1)
+{
+    if(arg1 == Qt::Checked) m_plist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    else m_plist->setPlaybackMode(QMediaPlaylist::Sequential);
+}
+
+
+void MainWindow::on_pushButtonDEL_clicked()
+{
+    m_plist->removeMedia(this->ui->tableViewPList->selectionModel()->currentIndex().row());
+    m_plist_model->removeRow(this->ui->tableViewPList->selectionModel()->currentIndex().row());
+}
+
+
+void MainWindow::on_pushButtonCLR_clicked()
+{
+    m_plist->clear();
+    m_plist_model->clear();
+    m_plist_model->setHorizontalHeaderLabels(QStringList() << "Audio Track" << "File Path" << "Duration");
+    this->ui->tableViewPList->hideColumn(1);
+    int duration_width = 64;
+    this->ui->tableViewPList->setColumnWidth(2,duration_width);
+    this->ui->tableViewPList->setColumnWidth(0,this->ui->tableViewPList->width() - duration_width*1.7);
+}
+
+
+void MainWindow::on_pushButtonAddDir_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory
+            (
+                this,
+                "Open directory",
+                "D:\\musik\\",
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+             );
+    if(!dir.isEmpty())
+    {
+        QDir directory(dir);
+        directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+        QStringList files = directory.entryList();
+        for(QString file:files)
+            LoadFileToPList(directory.filePath(file));
+    }
 }
 

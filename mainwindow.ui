@@ -241,8 +241,97 @@
       <x>20</x>
       <y>150</y>
       <width>551</width>
-      <height>201</height>
+      <height>171</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonShuffle">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>330</y>
+      <width>48</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>Shuffle</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxRepeate">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>330</y>
+      <width>70</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Repeate</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonDEL">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>330</y>
+      <width>48</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>DEL</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonCLR">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>330</y>
+      <width>48</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>CLR</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonAddDir">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>330</y>
+      <width>48</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>DIR</string>
     </property>
    </widget>
   </widget>

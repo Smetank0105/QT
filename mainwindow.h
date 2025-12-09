@@ -40,6 +40,16 @@ private slots:
 
     void on_horizontalSliderTime_sliderMoved(qint64 position);
 
+    void on_pushButtonShuffle_clicked();
+
+    void on_checkBoxRepeate_stateChanged(int arg1);
+
+    void on_pushButtonDEL_clicked();
+
+    void on_pushButtonCLR_clicked();
+
+    void on_pushButtonAddDir_clicked();
+
 private:
     Ui::MainWindow *ui;
 	QMediaPlayer* m_player;
