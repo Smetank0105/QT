@@ -50,10 +50,15 @@ private slots:
 
     void on_pushButtonAddDir_clicked();
 
+    void on_pushButtonLoop_clicked();
+
 private:
     Ui::MainWindow *ui;
 	QMediaPlayer* m_player;
     QMediaPlaylist* m_plist;
     QStandardItemModel* m_plist_model;
+
+    bool shuffle;
+    bool loop;
 };
 #endif // MAINWINDOW_H

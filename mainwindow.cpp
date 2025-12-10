@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->pushButtonStop->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
 	ui->pushButtonMute->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
     ui->horizontalSliderVolume->setRange(0, 100);
+    ui->pushButtonLoop->setIcon(style()->standardIcon(QStyle::SP_BrowserReload));
 
 	//          Player init:
 	m_player = new QMediaPlayer();
@@ -55,6 +56,9 @@ MainWindow::MainWindow(QWidget *parent)
                     this->ui->labelFilename->setText(media.canonicalUrl().toString());
                     this->setWindowTitle(this->ui->labelFilename->text().split('/').last());
             });
+
+    shuffle=false;
+    loop=false;
 }
 
 MainWindow::~MainWindow()
@@ -137,26 +141,31 @@ void MainWindow::on_horizontalSliderTime_sliderMoved(qint64 position)
 
 void MainWindow::on_pushButtonShuffle_clicked()
 {
-    this->m_plist_model->clear();
+//    this->m_plist_model->clear();
 
-    m_plist_model->setHorizontalHeaderLabels(QStringList() << "Audio Track" << "File Path" << "Duration");
-    this->ui->tableViewPList->hideColumn(1);
-    int duration_width = 64;
-    this->ui->tableViewPList->setColumnWidth(2,duration_width);
-    this->ui->tableViewPList->setColumnWidth(0,this->ui->tableViewPList->width() - duration_width*1.7);
+//    m_plist_model->setHorizontalHeaderLabels(QStringList() << "Audio Track" << "File Path" << "Duration");
+//    this->ui->tableViewPList->hideColumn(1);
+//    int duration_width = 64;
+//    this->ui->tableViewPList->setColumnWidth(2,duration_width);
+//    this->ui->tableViewPList->setColumnWidth(0,this->ui->tableViewPList->width() - duration_width*1.7);
 
-    this->m_plist->shuffle();
+//    this->m_plist->shuffle();
 
-    for(int i =0; i < m_plist->mediaCount(); i++)
-    {
-        QUrl url = m_plist->media(i).canonicalUrl();
-        QList<QStandardItem*> items;
-        items.append(new QStandardItem(url.fileName()));
-        items.append(new QStandardItem(url.path()));
-        m_plist_model->appendRow(items);
-    }
+//    for(int i =0; i < m_plist->mediaCount(); i++)
+//    {
+//        QUrl url = m_plist->media(i).canonicalUrl();
+//        QList<QStandardItem*> items;
+//        items.append(new QStandardItem(url.fileName()));
+//        items.append(new QStandardItem(url.path()));
+//        m_plist_model->appendRow(items);
+//    }
 
-    this->ui->tableViewPList->selectRow(m_plist->currentIndex());
+//    this->ui->tableViewPList->selectRow(m_plist->currentIndex());
+
+    this->ui->pushButtonShuffle->setCheckable(true);
+    shuffle = !shuffle;
+    this->m_plist->setPlaybackMode(shuffle ? QMediaPlaylist::PlaybackMode::Random : QMediaPlaylist::PlaybackMode::Sequential);
+    this->ui->pushButtonShuffle->setChecked(shuffle);
 }
 
 
@@ -169,8 +178,11 @@ void MainWindow::on_checkBoxRepeate_stateChanged(int arg1)
 
 void MainWindow::on_pushButtonDEL_clicked()
 {
-    m_plist->removeMedia(this->ui->tableViewPList->selectionModel()->currentIndex().row());
-    m_plist_model->removeRow(this->ui->tableViewPList->selectionModel()->currentIndex().row());
+    while(ui->tableViewPList->selectionModel()->selectedRows().count())
+    {
+        m_plist->removeMedia(this->ui->tableViewPList->selectionModel()->selectedRows().first().row());
+        m_plist_model->removeRow(this->ui->tableViewPList->selectionModel()->selectedRows().first().row());
+    }
 }
 
 
@@ -203,5 +215,14 @@ void MainWindow::on_pushButtonAddDir_clicked()
         for(QString file:files)
             LoadFileToPList(directory.filePath(file));
     }
+}
+
+
+void MainWindow::on_pushButtonLoop_clicked()
+{
+    loop = !loop;
+    this->ui->pushButtonLoop->setCheckable(true);
+    this->m_plist->setPlaybackMode(loop ? QMediaPlaylist::PlaybackMode::Loop : QMediaPlaylist::PlaybackMode::Sequential);
+    this->ui->pushButtonLoop->setChecked(loop);
 }
 
