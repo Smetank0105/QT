@@ -20,6 +20,8 @@ public:
     ~MainWindow();
 
     void LoadFileToPList(const QString& filename);
+    void SaveToFile();
+    void LoadFromFile();
 
 private slots:
 	void on_pushButtonAdd_clicked();

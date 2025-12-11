@@ -59,10 +59,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     shuffle=false;
     loop=false;
+
+    LoadFromFile();
 }
 
 MainWindow::~MainWindow()
 {
+    SaveToFile();
     delete m_plist_model;
     delete m_plist;
 	delete m_player;
@@ -76,6 +79,26 @@ void MainWindow::LoadFileToPList(const QString &filename)
     items.append(new QStandardItem(QDir(filename).dirName()));
     items.append(new QStandardItem(filename));
     m_plist_model->appendRow(items);
+}
+
+void MainWindow::SaveToFile()
+{
+    QUrl file = QUrl::fromLocalFile("my_plist.m3u");
+    m_plist->save(file, "m3u");
+}
+
+void MainWindow::LoadFromFile()
+{
+    QUrl file = QUrl::fromLocalFile("my_plist.m3u");
+    m_plist->load(file, "m3u");
+    for(int i =0; i < m_plist->mediaCount(); i++)
+    {
+        QUrl url = m_plist->media(i).canonicalUrl();
+        QList<QStandardItem*> items;
+        items.append(new QStandardItem(url.fileName()));
+        items.append(new QStandardItem(url.path()));
+        m_plist_model->appendRow(items);
+    }
 }
 
 void MainWindow::on_pushButtonAdd_clicked()
