@@ -83,21 +83,45 @@ void MainWindow::LoadFileToPList(const QString &filename)
 
 void MainWindow::SaveToFile()
 {
-    QUrl file = QUrl::fromLocalFile("my_plist.m3u");
-    m_plist->save(file, "m3u");
+//    QUrl file = QUrl::fromLocalFile("my_plist.m3u8");
+//    m_plist->save(file, "m3u8");
+    QFile file("my_plist.plist");
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream out(&file);
+        out.setCodec("UTF-8");
+        for(int i = 0; i < m_plist->mediaCount(); i++)
+        {
+            QString path = m_plist->media(i).canonicalUrl().toString();
+            out << path << endl;
+        }
+        file.close();
+    }
 }
 
 void MainWindow::LoadFromFile()
 {
-    QUrl file = QUrl::fromLocalFile("my_plist.m3u");
-    m_plist->load(file, "m3u");
-    for(int i =0; i < m_plist->mediaCount(); i++)
+//    QUrl file = QUrl::fromLocalFile("my_plist.plist");
+//    m_plist->load(file, "plist");
+//    for(int i =0; i < m_plist->mediaCount(); i++)
+//    {
+//        QUrl url = m_plist->media(i).canonicalUrl();
+//        QList<QStandardItem*> items;
+//        items.append(new QStandardItem(url.fileName()));
+//        items.append(new QStandardItem(url.path()));
+//        m_plist_model->appendRow(items);
+//    }
+    QFile file("my_plist.plist");
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QUrl url = m_plist->media(i).canonicalUrl();
-        QList<QStandardItem*> items;
-        items.append(new QStandardItem(url.fileName()));
-        items.append(new QStandardItem(url.path()));
-        m_plist_model->appendRow(items);
+        QTextStream in(&file);
+        in.setCodec("UTF-8");
+        while(!in.atEnd())
+        {
+            QString line = in.readLine();
+            LoadFileToPList(line);
+        }
+        file.close();
     }
 }
 
