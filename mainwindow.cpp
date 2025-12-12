@@ -72,8 +72,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::IsAudioExtention(const QString& filename)
+{
+    if(filename.split('.').last() == "mp3") return true;
+    if(filename.split('.').last() == "flac") return true;
+    if(filename.split('.').last() == "flacc") return true;
+    return false;
+}
+
 void MainWindow::LoadFileToPList(const QString &filename)
 {
+    if(!IsAudioExtention(filename)) return;
     m_plist->addMedia(QUrl(filename));
     QList<QStandardItem*> items;
     items.append(new QStandardItem(QDir(filename).dirName()));
@@ -244,24 +253,34 @@ void MainWindow::on_pushButtonCLR_clicked()
     this->ui->tableViewPList->setColumnWidth(0,this->ui->tableViewPList->width() - duration_width*1.7);
 }
 
+void MainWindow::TraverseDirectories(const QString& dirname)
+{
+    if(!dirname.isEmpty())
+    {
+        QDir dir(dirname);
+        //dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::AllDirs);
+        QFileInfoList files = dir.entryInfoList();
+        for(QFileInfo file:files)
+        {
+            if(file.fileName() == "." || file.fileName() == "..")continue;
+            if(file.isFile())
+                LoadFileToPList(dir.filePath(file.fileName()));
+            if(file.isDir())
+                TraverseDirectories(dir.filePath(file.fileName()));
+        }
+    }
+}
 
 void MainWindow::on_pushButtonAddDir_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory
+    QString dirname = QFileDialog::getExistingDirectory
             (
                 this,
                 "Open directory",
                 "D:\\musik\\",
                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
              );
-    if(!dir.isEmpty())
-    {
-        QDir directory(dir);
-        directory.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-        QStringList files = directory.entryList();
-        for(QString file:files)
-            LoadFileToPList(directory.filePath(file));
-    }
+    TraverseDirectories(dirname);
 }
 
 

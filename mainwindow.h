@@ -19,9 +19,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    bool IsAudioExtention(const QString& filename);
     void LoadFileToPList(const QString& filename);
     void SaveToFile();
     void LoadFromFile();
+    void TraverseDirectories(const QString& dirname);
 
 private slots:
 	void on_pushButtonAdd_clicked();
